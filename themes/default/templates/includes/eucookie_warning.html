@@ -1,0 +1,15 @@
+{% load mezzanine_tags %}
+
+{% if not eucookie_consent %}
+<div class="eu-cookie-warning">
+<a href="javascript:acceptCookies()">This site uses cookies. These are harmless things that all websites in the world use. EU law states I must tell you I use them so if you carry on browsing I'll presume you are okay with that. Click anywhere here to get rid of this message. If you are really interested you can read more from the links in the footer.
+</a>
+</div>
+<script>
+function acceptCookies(){
+    document.cookie = "eucookie_consent=yes;max-age=31536000";
+    document.location.reload(true);
+}
+
+</script>
+{% endif %}

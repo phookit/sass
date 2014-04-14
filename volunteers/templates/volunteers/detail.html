@@ -1,0 +1,43 @@
+{% extends "pages/page.html" %}
+{% load mezzanine_tags geocoder i18n %}
+
+
+{% block main %}{{ block.super }}
+
+    {% editable volunteer.title %}
+    <h1>{{ volunteer.title }}</h1>
+    {% endeditable %}
+
+
+<div class="row-fluid">
+        <div class="span4">
+                <b>Address</b>
+                <address>
+                        {% editable volunteer.street1 %}
+                            {{volunteer.street1}}<br />
+                        {% endeditable %}
+                        {% editable volunteer.street2 %}
+                            {{volunteer.street2}}<br />
+                        {% endeditable %}
+                        {% editable volunteer.town %}
+                            {{volunteer.town}}<br />
+                        {% endeditable %}
+                        {% editable volunteer.postcode %}
+                            {{volunteer.postcode}}<br />
+                        {% endeditable %}
+                </address>
+        </div>
+
+        <div class="span4">
+        <b>Contact</b>
+        {% if volunteer.mobile %}<p>Mobile: {{volunteer.mobile}}</p>{% endif %}
+        {% if volunteer.landline %}<p>Landline: {{volunteer.landline}}</p>{% endif %}
+
+        </div>
+        <div class="span4">
+                <p>Can Homecheck: {% if volunteer.can_homecheck %}Yes{% else %}No{% endif %}<p>
+                <p>Can Foster: {% if volunteer.can_foster %}Yes{% else %}No{% endif %}<p>
+        </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "mobile/base.html" %}
+{% load i18n mezzanine_tags keyword_tags %}
+
+
+{% block meta_title %}{% if page %}{{ page.richtextpage.title }}{% else %}{% trans "Dogs" %}{% endif %}{% endblock %}
+
+{% block meta_description %}{% metablock %}
+{{ page.description }}
+{% endmetablock %}{% endblock %}
+
+{% block title %}
+{% if page %}{{ page.title }}{% else %}{% trans "Dogs" %}{% endif %}
+{% endblock %}
+
+{% block main %}{{ block.super }}
+
+
+    {% editable dog.title %}
+    <h1>{{ dog.title }}</h1>
+    {% endeditable %}
+    {% editable dog.state %}
+    <h2>
+    {% if dog.state == 'available' %}Available{% endif %}
+    {% if dog.state == 'rehomed' %}Rehomed{% endif %}
+    </h2>
+    {% endeditable %}
+    
+
+{% editable dog.content %}
+            {{ dog.content|richtext_filter|safe }}
+        {% endeditable %}
+
+        <div class="media-list">
+            <img class="image-overlay-thumb" src="{{ MEDIA_URL }}{% thumbnail dog.image 200 200 %}">
+        </div>    
+
+
+    {% if dog.state == 'available' %}
+    <p>Please <a href="/contact/">contact us</a> if you can offer {{ dog.title }} a forever home.</p>
+    {% endif %}
+
+
+{% block dog_post_detail_sharebuttons %}
+{% set_short_url_for dog %}
+<a class="btn small primary share-twitter" target="_blank" href="http://twitter.com/home?status={{ dog.short_url|urlencode }}%20{{ dog.title|urlencode }}">{% trans "Share on Twitter" %}</a>
+<a class="btn small primary share-facebook" target="_blank" href="http://facebook.com/sharer.php?u={{ request.build_absolute_uri }}&amp;t={{ dog.title|urlencode }}">{% trans "Share on Facebook" %}</a>
+{% endblock %}
+
+
+
+{% endblock %}
+

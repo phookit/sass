@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load i18n future mezzanine_tags blog_tags keyword_tags disqus_tags %}
+
+{% block meta_title %}{% if page %}{{ page.richtextpage.meta_title }}{% else %}{% trans "Volunteers" %}{% endif %}{% endblock %}
+
+{% block meta_keywords %}{% metablock %}
+{% keywords_for page as keywords %}
+{% for keyword in keywords %}
+    {% if not forloop.first %}, {% endif %}
+    {{ keyword }}
+{% endfor %}
+{% endmetablock %}{% endblock %}
+
+{% block meta_description %}{% metablock %}
+{{ page.description }}
+{% endmetablock %}{% endblock %}
+
+{% block title %}
+{% if page %}
+{% editable page.title %}{{ page.title }}{% endeditable %}
+{% else %}
+{% trans "Volunteers" %}
+{% endif %}
+{% endblock %}
+
+{% block breadcrumb_menu %}
+{{ block.super }}
+{% endblock %}
+
+{% block main %}
+
+<p>There are several ways you can volunteer for us:</p>
+<ul>
+<li>Man stalls at fund raising events.</li>
+<li>Homecheck potential homes.</li>
+<li>Help foster homeless dogs.</li>
+<li>More?</li>
+</ul>
+<p>If you can do any of the above please fill in an <a href="/volunteers/application/">application</a> form.</p>
+
+
+{% endblock %}

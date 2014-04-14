@@ -1,0 +1,48 @@
+{% extends "pages/page.html" %}
+{% load mezzanine_tags geocoder i18n %}
+
+
+{% block main %}{{ block.super }}
+
+    {% editable supporter.title %}
+    <h1>{{ supporter.title }}</h1>
+    {% endeditable %}
+
+{% if supporter.image %}
+<div class="media-list">
+            <img class="image-overlay-thumb" src="{{ MEDIA_URL }}{% thumbnail supporter.image 640 0 %}">
+        </div>  
+{% endif %}
+
+{% editable supporter.content %}
+            {{ supporter.content|richtext_filter|safe }}
+        {% endeditable %}
+
+  
+
+<div class="row-fluid">
+        <div class="span4">
+                <b>Location</b>
+                <address>
+                        {% editable supporter.address %}
+                            {{supporter.address|linebreaksbr}}<br />
+                        {% endeditable %}
+                        <a href='{{supporter|google_nav_url}}' class="btn btn-small">
+                                Get Directions
+                        </a>
+                </address>
+        </div>
+</div>
+
+
+
+    {% google_static_map supporter 670 150 10 %}
+
+{% block supporter_post_detail_sharebuttons %}
+{% set_short_url_for supporter %}
+<a class="btn small primary share-twitter" target="_blank" href="http://twitter.com/home?status={{ supporter.short_url|urlencode }}%20{{ supporter.title|urlencode }}">{% trans "Share on Twitter" %}</a>
+<a class="btn small primary share-facebook" target="_blank" href="http://facebook.com/sharer.php?u={{ request.build_absolute_uri }}&amp;t={{ supporter.title|urlencode }}">{% trans "Share on Facebook" %}</a>
+{% endblock %}
+
+
+{% endblock %}

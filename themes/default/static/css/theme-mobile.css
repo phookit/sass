@@ -1,0 +1,16 @@
+
+.ui-bar-d {  border: 1px solid #ccc; background: #035996; color: #333; text-shadow: 0 1px 0 #eee; background-image: -moz-linear-gradient(top, #063455, #035996); background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #063455),color-stop(1, #035996));   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#063455', EndColorStr='#035996')"; }
+/*.ui-bar-d {  border: 1px solid #ccc; background: #bbb; color: #333; text-shadow: 0 1px 0 #eee; background-image: -moz-linear-gradient(top, #063455, #bbb); background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #063455),color-stop(1, #bbb));   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ddd', EndColorStr='#bbb')"; }*/
+.ui-bar-d, .ui-bar-d input, .ui-bar-d select, .ui-bar-d textarea, .ui-bar-d button { font-family: Helvetica, Arial, sans-serif; }
+.ui-bar-d .ui-link-inherit { color: #333; }
+.ui-bar-d .ui-link { color: #2489CE; font-weight: bold; }
+
+.ui-header h1 {
+    color: #FFF;
+    text-shadow: 0 1px 0 #157cc4; 
+}
+
+.ui-footer p {
+    color: #FFF;
+    text-shadow: 0 1px 0 #157cc4; 
+}

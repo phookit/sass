@@ -1,0 +1,34 @@
+{% extends "mobile/base.html" %}
+{% load i18n future mezzanine_tags keyword_tags %}
+
+{% block meta_title %}{% if page %}{{ page.richtextpage.title }}{% else %}{% trans "Dogs" %}{% endif %}{% endblock %}
+
+{% block meta_keywords %}{% metablock %}
+{% keywords_for page as keywords %}
+{% for keyword in keywords %}
+    {% if not forloop.first %}, {% endif %}
+    {{ keyword }}
+{% endfor %}
+{% endmetablock %}{% endblock %}
+
+{% block meta_description %}{% metablock %}
+{{ page.description }}
+{% endmetablock %}{% endblock %}
+
+{% block title %}
+{% if page %}{{ page.title }}{% else %}{% trans "Dogs" %}{% endif %}
+{% endblock %}
+
+{% block main %}
+
+{% for s in stories %}
+    <div class="row-fluid">
+        <div class="span4">
+            <p><a href="{% url 'stories:detail' s.id %}">{{ s.title }}</a> - {% if s.mtype == 'story' %}Story{%endif%}{% if s.mtype == 'poem' %}Poem{%endif%}</p>
+        </div>
+    </div>
+{% endfor %}
+
+{% pagination_for stories %}
+
+{% endblock %}

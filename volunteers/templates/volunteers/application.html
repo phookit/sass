@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+
+{% block breadcrumb_menu %}
+{{ block.super }}
+{% endblock %}
+
+{% block main %}
+<p>Begin volunteering for us by filling in the form below.</p>
+
+<form action="/volunteers/application/" method="post">{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "mobile/base.html" %}
+{% load i18n mezzanine_tags keyword_tags geocoder %}
+
+
+{% block meta_title %}{% if page %}{{ page.richtextpage.title }}{% else %}{% trans "Supporters" %}{% endif %}{% endblock %}
+
+{% block meta_description %}{% metablock %}
+{{ page.description }}
+{% endmetablock %}{% endblock %}
+
+{% block title %}
+{% if page %}{{ page.title }}{% else %}{% trans "Supporters" %}{% endif %}
+{% endblock %}
+
+{% block main %}{{ block.super }}
+
+    <h1>{{ supporter.title }}</h1>
+
+            {{ supporter.content|richtext_filter|safe }}
+
+{% block supporter_post_detail_sharebuttons %}
+{% set_short_url_for supporter %}
+<a class="btn small primary share-twitter" target="_blank" href="http://twitter.com/home?status={{ supporter.short_url|urlencode }}%20{{ supporter.title|urlencode }}">{% trans "Share on Twitter" %}</a>
+<a class="btn small primary share-facebook" target="_blank" href="http://facebook.com/sharer.php?u={{ request.build_absolute_uri }}&amp;t={{ supporter.title|urlencode }}">{% trans "Share on Facebook" %}</a>
+{% endblock %}
+
+<div class="row-fluid">
+        <div class="span4">
+                <b>Location</b>
+                <address>
+                            {{supporter.address|linebreaksbr}}<br />
+                        <a href='{{supporter|google_nav_url}}' class="btn btn-small">
+                                Get Directions
+                        </a>
+                </address>
+        </div>
+</div>
+
+    {% google_static_map supporter 670 150 10 %}
+
+{% endblock %}
+

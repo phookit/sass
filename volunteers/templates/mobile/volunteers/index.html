@@ -1,0 +1,46 @@
+{% extends "mobile/base.html" %}
+{% load i18n future mezzanine_tags blog_tags keyword_tags %}
+
+{% block meta_title %}{% if page %}{{ page.richtextpage.title }}{% else %}{% trans "Volunteers" %}{% endif %}{% endblock %}
+
+{% block meta_keywords %}{% metablock %}
+{% keywords_for page as keywords %}
+{% for keyword in keywords %}
+    {% if not forloop.first %}, {% endif %}
+    {{ keyword }}
+{% endfor %}
+{% endmetablock %}{% endblock %}
+
+{% block meta_description %}{% metablock %}
+{{ page.description }}
+{% endmetablock %}{% endblock %}
+
+{% block title %}
+{% if page %}{{ page.title }}{% else %}{% trans "Volunteers" %}{% endif %}
+{% endblock %}
+
+{% block main %}
+
+{% if latest_event_list %}
+    <ul>
+        {% for event in latest_event_list %}
+        <li><a href="{% url 'events:detail' event.id %}">{{ event.title }}</a> {{ event.event_date }} from {{ event.start_time }} until {{ event.end_time }}</li>
+        {% endfor %}
+    </ul>
+    {% pagination_for latest_event_list %}
+{% else %}
+    <p>No events are available.</p>
+{% endif %}
+
+{% if previous_event_list %}
+<h3>Previous Volunteers</h3>
+    <ul>
+        {% for event in previous_event_list %}
+        <li><a href="{% url 'events:detail' event.id %}">{{ event.title}}</a> {{ event.event_date }} from {{ event.start_time }} until {{ event.end_time }}</li>
+        {% endfor %}
+    </ul>
+    {% pagination_for previous_event_list %}
+{% endif %}
+
+
+{% endblock %}

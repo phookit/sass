@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load i18n future mezzanine_tags blog_tags keyword_tags disqus_tags %}
+
+{% block meta_title %}{% if page %}{{ page.richtextpage.meta_title }}{% else %}{% trans "Dogs" %}{% endif %}{% endblock %}
+
+{% block meta_keywords %}{% metablock %}
+{% keywords_for page as keywords %}
+{% for keyword in keywords %}
+    {% if not forloop.first %}, {% endif %}
+    {{ keyword }}
+{% endfor %}
+{% endmetablock %}{% endblock %}
+
+{% block meta_description %}{% metablock %}
+{{ page.description }}
+{% endmetablock %}{% endblock %}
+
+{% block title %}
+{% if page %}
+{% editable page.title %}{{ page.title }}{% endeditable %}
+{% else %}
+{% trans "Dogs" %}
+{% endif %}
+{% endblock %}
+
+{% block breadcrumb_menu %}
+{{ block.super }}
+{% endblock %}
+
+{% block main %}
+
+{% if dogs %}
+{% for d in dogs %}
+    <div class="row">
+        <div class="span4">
+            <p><a href="{% url 'dogs:detail' d.id %}">{{ d.title }}</a> - {% if d.state == 'available' %}Available{%endif%}{% if d.state == 'rehomed' %}Rehomed{%endif%}</p>
+            <p>Age: {{ d.age }}</p>
+        </div>
+        <div class="span4">
+            <div class="media-list">
+                <a href="{% url 'dogs:detail' d.id %}">
+                <img class="image-overlay-thumb" src="{{ MEDIA_URL }}{% thumbnail d.image 100 0 %}">
+                </a>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+{% pagination_for dogs %}
+
+{% else %}
+<p>There are no dogs just now. Please check back later.</p>
+{% endif %}
+
+{% endblock %}

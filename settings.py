@@ -170,6 +170,7 @@ FILE_UPLOAD_PERMISSIONS = 0o644
 DATABASES = {
     "default": {
         # Add "postgresql_psycopg2", "mysql", "sqlite3" or "oracle".
+        #"ENGINE": "django.db.backends.",
         "ENGINE": "django.db.backends.",
         # DB name or path to database file if using sqlite3.
         "NAME": "",
@@ -236,6 +237,7 @@ TEMPLATE_DIRS = (os.path.join(PROJECT_ROOT, "templates"),)
 ################
 
 INSTALLED_APPS = (
+    #"themes.default",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -260,7 +262,7 @@ INSTALLED_APPS = (
     "volunteers",
     "dogs",
     "stories",
-    "themes",
+    "sync",
     #"mezzanine.accounts",
     "mezzanine.mobile",
 )

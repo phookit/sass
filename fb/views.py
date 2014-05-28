@@ -7,8 +7,8 @@ from django.shortcuts import redirect
 
 from mezzanine.utils.views import set_cookie
 
-from fb.auth import FbAuth
-from facebook import GraphAPI
+from fb.api import FbAuth
+# from facebook import GraphAPI
 
 
 import random # test
@@ -19,7 +19,6 @@ import string
 #FACEBOOK_APP_ID = "581369638626613"
 #FACEBOOK_APP_SECRET = "2551a0f60825f2c199de75c8926cfa0f"
 #FACEBOOK_AUTH_URL = 'http://testing.saveastaffie.net/fb/auth'
-FACEBOOK_ACCESS_TOKEN_LIFETIME = 30 * 24 * 60 * 60 # time in seconds
 
 
 def _fb_authorise():
@@ -119,54 +118,51 @@ def _get_events(access_token, page_id):
     print resp
 
 
-def index(request):
-    print "index..."
-    print "SESSION:",request.session.session_key
-    # return urllib.urlopen(url, urllib.urlencode(args)).read()
-    return render(request, 'fb/index.html', {})
+#def index(request):
+#    print "index..."
+#    print "SESSION:",request.session.session_key
+#    # return urllib.urlopen(url, urllib.urlencode(args)).read()
+#    return render(request, 'fb/index.html', {})
 
-
-def sync_events(request):
-    pass
+def nocookies(request):
+    print "FB nocookies..."
+    return render(request, 'fb/nocookies.html', {})
 
 
 def adminauth(request):
     print "FB admin auth..."
-    fbprofile = request.COOKIES.get('fbprofile', None)
-    if fbprofile:
-        fbprofile = json.loads(fbprofile)
+    #fbprofile = request.COOKIES.get('fbprofile', None)
+    #if fbprofile:
+        #    fbprofile = json.loads(fbprofile)
 
-    fbauth = FbAuth(request.COOKIES.get('fbtok', None),
-                                 request.COOKIES.get('fbprofile', None))
+    fbauth = FbAuth(request)
     if fbauth.authorised():
         print "Got FB token from cookies"
-        # --- test getting event...
-        acct = fbauth.get_account('Blaaar De Blaar')
-        if fbauth.can_create_content(acct):
-            _get_events(fbauth.access_token, acct['id'])
-        # ---
-
         return redirect(request.COOKIES.get('fbredir', '/'))
 
-    print "SESSION:",request.session.session_key
+    print "adminauth:SESSION:",request.session.session_key
 
-    fbauth.verify(True, request.GET.get("code", None))
+    try:
+        fbauth.verify(request)
+    except FbAuthCookiesException:
+        return redirect('/fb/nocookies')
+
+    response = None
     if fbauth.authorised():
         redir = request.COOKIES.get('fbredir', '/')
         print "GOT FB REDIR COOKIE:",redir
         response = redirect(redir)
         # delete the fb redirection cookie
         response.delete_cookie('fbredir')
-        set_cookie(response, 'fbtok', fbauth.access_token, expiry_seconds=FACEBOOK_ACCESS_TOKEN_LIFETIME, secure=False)
-        set_cookie(response, 'fbprofile', json.dumps(fbauth.user_profile), expiry_seconds=FACEBOOK_ACCESS_TOKEN_LIFETIME, secure=False)
-
-        return response
-    # dont have a verification code so request one
-    response = fbauth.authorise()
-    redir = request.GET.get("redir", None)
-    if redir:
-        print "SETTING REDIR COOKIE:",redir
-        set_cookie(response, 'fbredir', redir, expiry_seconds=30, secure=False)
+        # set FB cookies
+        fbauth.update_cookies(response)
+    else:
+        # dont have a verification code so request one
+        response = fbauth.authorise()
+        redir = request.GET.get("redir", None)
+        if redir:
+            print "SETTING REDIR COOKIE:",redir
+            set_cookie(response, 'fbredir', redir, expiry_seconds=30, secure=False)
     return response
 
 

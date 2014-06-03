@@ -1,0 +1,13 @@
+*.pyc
+*.pyo
+*.db
+*.swp
+*~
+.DS_Store
+.coverage
+local_settings.py
+/static
+fabfile.py
+/deploy
+
+

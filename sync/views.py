@@ -14,11 +14,10 @@ from django.db import transaction
 
 from phookit.apps.events.models import Event
 from phookit.apps.events.models import get_future_events as future_site_events
-from fb.models import get_future_events as future_fb_events
-from fb.models import create_fb_event_from_site_event, create_site_event_from_fb_live
-from fb.models import FbEvent
-from fb.api import FbAuth, FbEvents, FbNotAuthorisedException
-from fb import views as fbviews 
+from phookit.apps.fb.models import get_future_events as future_fb_events
+from phookit.apps.fb.models import create_fb_event_from_site_event, create_site_event_from_fb_live
+from phookit.apps.fb.models import FbEvent
+from phookit.apps.fb.api import FbAuth, FbEvents, FbNotAuthorisedException
 
 FB_PAGE_NAME = 'Blaaar De Blaar'
 

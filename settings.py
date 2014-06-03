@@ -257,7 +257,7 @@ INSTALLED_APPS = (
     "mezzanine.twitter",
     "phookit.apps.geocoders",
     "phookit.apps.events",
-    "fb",
+    "phookit.apps.fb",
     "supporters",
     "volunteers",
     "dogs",

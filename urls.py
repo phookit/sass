@@ -58,10 +58,10 @@ urlpatterns += patterns('',
 
     # url("^$", "mezzanine.blog.views.blog_post_list", name="home"),
 
-    ('^fb/', include('fb.urls', namespace='fb')),
+    ('^fb/', include('phookit.apps.fb.urls', namespace='fb')),
     ('^sync/', include('sync.urls', namespace='sync')),
     ('^events/', include('phookit.apps.events.urls', namespace='events')),
-    ('^supporters/', include('phookit.apps.supporters.urls', namespace='supporters')),
+    ('^supporters/', include('supporters.urls', namespace='supporters')),
     ('^volunteers/', include('volunteers.urls', namespace='volunteers')),
     ('^dogs/', include('dogs.urls', namespace='dogs')),
     ('^stories/', include('stories.urls', namespace='stories')),

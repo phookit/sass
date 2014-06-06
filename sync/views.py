@@ -56,6 +56,9 @@ def syncevents(request):
     #return
 
     handled_fb_eids = []
+    failed_fb_events = []
+    updated_fb_events = []
+    failed_site_events = []
     site_events = future_site_events()
     # check all site events are on FB
     for e in site_events:
@@ -68,6 +71,7 @@ def syncevents(request):
             compevent.eid = fbe.eid
             if not compevent.compare(fbe):
                 fbevents.update_event(settings.SYNC_FACEBOOK_PAGE_NAME, FbEvent=compevent)
+                updated_fb_events.append(compevent)
         except FbEvent.DoesNotExist:
             with transaction.atomic():
                 fbe = create_fb_event_from_site_event(e)
@@ -77,10 +81,10 @@ def syncevents(request):
 
                     fbe.save()
                 except:
+                    failed_fb_events.append(fbe)
                     if fbe.eid:
                         fbevents.delete_event(settings.SYNC_FACEBOOK_PAGE_NAME, fbe.eid)
 
-    failed_events = []
     latest_fb_events = fbevents.get_future_events(settings.SYNC_FACEBOOK_PAGE_NAME)
     for lfbe in latest_fb_events:
         if lfbe.eid in handled_fb_eids:
@@ -91,6 +95,7 @@ def syncevents(request):
             # print "LFBE ST:",lfbe.start_time,"FBE ST:",fbe.start_time
             if not lfbe.compare(fbe):
                 fbevents.update_event(settings.SYNC_FACEBOOK_PAGE_NAME, FbEvent=lfbe)
+                updated_fb_events.append(lfbe)
         except FbEvent.DoesNotExist:    
             with transaction.atomic():
                 # add the FB event to the website
@@ -101,12 +106,25 @@ def syncevents(request):
                 except ValidationError as e:
                     # Unmappable location
                     site_event.unmappable()
-                    failed_events.append(lfbe)
-                site_event.save()
+                    failed_fb_events.append(lfbe)
+                site_event_ok = False
+                try:
+                    site_event.save()
+                    site_event_ok = True
+                except:
+                    failed_site_events.append(site_event)
+                    
+                if site_event_ok:
+                    try:
+                        # Store the FB event
+                        fb_event = create_fb_event_from_site_event(site_event)
+                        fb_event.eid = lfbe.eid
+                        fb_event.save()
+                    except:
+                        failed_fb_events.append(fb_event)
 
-                # Store the FB event
-                fb_event = create_fb_event_from_site_event(site_event)
-                fb_event.eid = lfbe.eid
-                fb_event.save()
-    context = {}           
+
+    context = {'failed_site_events': failed_site_events,
+            'failed_fb_events': failed_fb_events,
+            'updated_fb_events': updated_fb_events}
     return render(request, 'sync/syncevents.html', context)

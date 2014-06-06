@@ -4,6 +4,30 @@
 
 {% block main %}{{ block.super }}
 
-<p>Syncd</p>
+<h2>Syncd</h2>
+
+<h3>Updated FB events</h3>
+{% for e in updated_fb_events %}
+<p>Title: {{e.name}}</p>
+<p>Start Date: {{e.start_date}}</p>
+<p>Location: {{e.location}}</p>
+<p>Description: {{e.description}}</p>
+{% endfor %}
+
+<h3>Failed FB events</h3>
+{% for e in failed_fb_events %}
+<p>Title: {{e.name}}</p>
+<p>Start Date: {{e.start_date}}</p>
+<p>Location: {{e.location}}</p>
+<p>Description: {{e.description}}</p>
+{% endfor %}
+
+<h3>Failed Site events</h3>
+{% for e in failed_site_events %}
+<p>Title: {{e.title}}</p>
+<p>Start Date: {{e.start_date}}</p>
+<p>Location: {{e.address}}</p>
+<p>Description: {{e.content|richtext_filter|safe}}</p>
+{% endfor %}
 
 {% endblock %}
